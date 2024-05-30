@@ -11,25 +11,25 @@ pipeline {
               }
             }
         }
-//      stage('Unit tests') {
-//            steps {
-//              sh "mvn test"
-//            }
-//            post {
-//              always {
-//                junit 'target/surefire-reports/*.xml'
-//                jacoco execPattern: 'target/jacoco.exec'
-//              }
-//            }
-//        }
-//      stage('Docker build/push') {
-//        steps {
-//          script {
-//            def commitHash = sh(script: 'git rev-parse --short HEAD', returnStdout: true)
-//          }
-//          sh 'docker buildx build --tag bialyrb/numeric-app:""$commitHash"" .'
-//        }
-//      }
+      stage('Unit tests') {
+            steps {
+              sh "mvn test"
+            }
+            post {
+              always {
+                junit 'target/surefire-reports/*.xml'
+                jacoco execPattern: 'target/jacoco.exec'
+              }
+            }
+        }
+      stage('Docker build/push') {
+        steps {
+          script {
+            def commitHash = sh(script: 'git rev-parse --short HEAD', returnStdout: true)
+          }
+          sh 'docker buildx build --tag bialyrb/numeric-app:""$commitHash"" .'
+        }
+      }
       stage('Docker push') {
         steps {
           withDockerRegistry([credentialsId: 'dockerhub', url: ""]) {
