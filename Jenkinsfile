@@ -38,7 +38,7 @@ pipeline {
             }
             sh 'printenv'
             sh "docker login -u ${USERNAME} -p ${PASSWORD}"
-            sh 'docker buildx build --file Dockerfile --pull --tag bialyrb/numeric-app:""${commitHash}"" --push .'
+            sh 'docker buildx build --file Dockerfile --pull --tag bialyrb/numeric-app:""$GIT_COMMIT"" --push .'
           }
         }
       }
