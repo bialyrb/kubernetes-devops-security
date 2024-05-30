@@ -30,7 +30,7 @@ pipeline {
           sh 'docker buildx build --tag bialyrb/numeric-app:""$commitHash"" .'
         }
       }
-      stage('Docker push') {
+      stage('Docker build/push') {
         steps {
           withDockerRegistry([credentialsId: 'dockerhub', url: ""]) {
             sh 'docker buildx build --file Dockerfile --pull --tag bialyrb/numeric-app:""$GIT_COMMIT"" --push .'
