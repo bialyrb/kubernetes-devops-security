@@ -33,7 +33,7 @@ pipeline {
           withCredentials([usernamePassword( credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
             sh 'printenv'
             sh "docker login -u ${USERNAME} -p ${PASSWORD}"
-            sh 'docker push -t bialyrb/numeric-app:""$GIT_COMMIT""'
+            sh 'docker push bialyrb/numeric-app:""$GIT_COMMIT""'
           }
         }
       }
