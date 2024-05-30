@@ -22,18 +22,23 @@ pipeline {
 //              }
 //            }
 //        }
-      stage('Docker build') {
-        steps {
-          sh 'printenv'
-          sh 'DOCKER_BUILDKIT=1 docker buildx build --tag bialyrb/numeric-app:""$GIT_COMMIT"" .'
-        }
-      }
+//      stage('Docker build/push') {
+//        steps {
+//          script {
+//            def commitHash = sh(script: 'git rev-parse --short HEAD', returnStdout: true)
+//          }
+//          sh 'docker buildx build --tag bialyrb/numeric-app:""$commitHash"" .'
+//        }
+//      }
       stage('Docker push') {
         steps {
           withCredentials([usernamePassword( credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+            script {
+              def commitHash = sh(script: 'git rev-parse --short HEAD', returnStdout: true)
+            }
             sh 'printenv'
             sh "docker login -u ${USERNAME} -p ${PASSWORD}"
-            sh 'docker push bialyrb/numeric-app:""$GIT_COMMIT""'
+            sh 'docker buildx build --file Dockerfile --pull --tag bialyrb/numeric-app:""$commitHash" --push .'
           }
         }
       }
