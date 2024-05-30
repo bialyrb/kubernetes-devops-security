@@ -3,32 +3,24 @@ pipeline {
 
   stages {
       stage('Build Artifact') {
-            steps {
-              sh "mvn clean package -DskipTests=true"
-              script {
-                  def archiveString = 'target/*.jar'
-                  archiveArtifacts artifacts: archiveString, fingerprint: true
-              }
+          steps {
+            sh "mvn clean package -DskipTests=true"
+            script {
+              def archiveString = 'target/*.jar'
+              archiveArtifacts artifacts: archiveString, fingerprint: true
             }
+          }
         }
       stage('Unit tests') {
-            steps {
-              sh "mvn test"
-            }
-            post {
-              always {
-                junit 'target/surefire-reports/*.xml'
-                jacoco execPattern: 'target/jacoco.exec'
-              }
-            }
-        }
-      stage('Docker build/push') {
-        steps {
-          script {
-            def commitHash = sh(script: 'git rev-parse --short HEAD', returnStdout: true)
+          steps {
+            sh "mvn test"
           }
-          sh 'docker buildx build --tag bialyrb/numeric-app:""$commitHash"" .'
-        }
+          post {
+            always {
+              junit 'target/surefire-reports/*.xml'
+              jacoco execPattern: 'target/jacoco.exec'
+            }
+          }
       }
       stage('Docker build/push') {
         steps {
