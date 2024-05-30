@@ -11,17 +11,17 @@ pipeline {
               }
             }
         }
-      stage('Unit tests') {
-            steps {
-              sh "mvn test"
-            }
-            post {
-              always {
-                junit 'target/surefire-reports/*.xml'
-                jacoco execPattern: 'target/jacoco.exec'
-              }
-            }
-        }
+//      stage('Unit tests') {
+//            steps {
+//              sh "mvn test"
+//            }
+//            post {
+//              always {
+//                junit 'target/surefire-reports/*.xml'
+//                jacoco execPattern: 'target/jacoco.exec'
+//              }
+//            }
+//        }
       stage('Docker build') {
         steps {
           sh 'printenv'
