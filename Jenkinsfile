@@ -36,6 +36,7 @@ pipeline {
             script {
               def commitHash = sh(script: 'git rev-parse --short HEAD', returnStdout: true)
             }
+            sh 'export commitHash=$(git rev-parse --short HEAD)'
             sh 'printenv'
             sh "docker login -u ${USERNAME} -p ${PASSWORD}"
             sh 'docker buildx build --file Dockerfile --pull --tag bialyrb/numeric-app:""$GIT_COMMIT"" --push .'
