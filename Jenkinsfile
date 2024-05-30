@@ -5,8 +5,11 @@ pipeline {
       stage('Build Artifact') {
             steps {
               sh "mvn clean package -DskipTests=true"
-              archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
-
+              script {
+                  def archiveString = 'target/*.jar'
+                  archiveArtifacts artifacts: archiveString, fingerprint: true
+              }
+            }
         }
       stage('Unit tests') {
             steps {
