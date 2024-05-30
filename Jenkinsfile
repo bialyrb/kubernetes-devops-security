@@ -32,13 +32,14 @@ pipeline {
 //      }
       stage('Docker push') {
         steps {
-          withCredentials([usernamePassword( credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+//          withCredentials([usernamePassword( credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+          withDockerRegistry([credentialsId: 'dockerhub', url: ""]) {
             script {
               def commitHash = sh(script: 'git rev-parse --short HEAD', returnStdout: true)
             }
             sh 'export commitHash=$(git rev-parse --short HEAD)'
             sh 'printenv'
-            sh "docker login -u ${USERNAME} -p ${PASSWORD}"
+//            sh "docker login -u ${USERNAME} -p ${PASSWORD}"
             sh 'docker buildx build --file Dockerfile --pull --tag bialyrb/numeric-app:""$GIT_COMMIT"" --push .'
           }
         }
