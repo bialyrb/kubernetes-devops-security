@@ -25,7 +25,7 @@ pipeline {
       stage('Docker build') {
         steps {
           sh 'printenv'
-          sh 'docker build -t bialyrb/numeric-app:""$GIT_COMMIT""'
+          sh 'DOCKER_BUILDKIT=1 docker buildx build --file Dockerfile --pull --tag bialyrb/numeric-app:""$GIT_COMMIT""'
         }
       }
       stage('Docker push') {
