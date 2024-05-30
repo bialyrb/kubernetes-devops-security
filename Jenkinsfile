@@ -22,5 +22,20 @@ pipeline {
               }
             }
         }
+      stage('Docker build') {
+        steps {
+          sh 'printenv'
+          sh 'docker build -t bialyrb/numeric-app:""$GIT_COMMIT""'
+        }
+      }
+      stage('Docker push') {
+        steps {
+          withCredentials([usernamePassword( credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+            sh 'printenv'
+            sh "docker login -u ${USERNAME} -p ${PASSWORD}"
+            sh 'docker push -t bialyrb/numeric-app:""$GIT_COMMIT""'
+          }
+        }
+      }
     }
 }
